@@ -88,7 +88,16 @@ class ConverterRepositoryImpl implements ConverterRepository {
     Future<void> run() async {
       controller.add(item.copyWith(status: ConvertStatus.processing, progress: 0.0));
 
-      final outputPath = p.join(outputDir, '${item.outputName}.mp4');
+      var outputPath = p.join(outputDir, '${item.outputName}.mp4');
+      if (!outputPath.toLowerCase().endsWith('.mp4')) {
+        outputPath = '$outputPath.mp4';
+      }
+
+      final outputFile = File(outputPath);
+      if (await outputFile.exists()) {
+        await outputFile.delete();
+      }
+
       const fallbackDuration = 120.0;
 
       final success = await ffmpeg.convertTo3gp(

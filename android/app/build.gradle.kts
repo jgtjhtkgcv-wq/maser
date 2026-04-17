@@ -17,7 +17,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = "17"
     }
 
     defaultConfig {
@@ -30,7 +30,7 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         ndk {
-            abiFilters("armeabi-v7a", "arm64-v8a")
+            abiFilters += setOf("armeabi-v7a", "arm64-v8a")
         }
     }
 

@@ -29,7 +29,7 @@ class LightCompressorDatasource {
         videoQuality: VideoQuality.very_low,
         isMinBitrateCheckEnabled: false,
         video: Video(
-          videoName: p.basenameWithoutExtension(outputPath),
+          videoName: p.basename(outputPath),
           keepOriginalResolution: true,
         ),
         android: AndroidConfig(isSharedStorage: true, saveAt: SaveAt.Movies),

@@ -26,17 +26,29 @@ void main() async {
     systemNavigationBarColor: Color(0xFF08080F),
   ));
 
-  await _requestPermissions();
+  await _checkPermissions();
 
   runApp(const YJConverterApp());
 }
 
-Future<void> _requestPermissions() async {
-  await [
-    Permission.storage,
+Future<bool> _checkPermissions() async {
+  final statuses = await [
     Permission.manageExternalStorage,
+    Permission.storage,
     Permission.videos,
   ].request();
+
+  final isStorageGranted = statuses[Permission.storage] == PermissionStatus.granted;
+  final isManageGranted = statuses[Permission.manageExternalStorage] == PermissionStatus.granted;
+
+  if (!isStorageGranted || !isManageGranted) {
+    if (statuses[Permission.storage]?.isPermanentlyDenied == true ||
+        statuses[Permission.manageExternalStorage]?.isPermanentlyDenied == true) {
+      await openAppSettings();
+    }
+  }
+
+  return isStorageGranted && isManageGranted;
 }
 
 class YJConverterApp extends StatelessWidget {
