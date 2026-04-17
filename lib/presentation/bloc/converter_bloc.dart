@@ -7,7 +7,7 @@ import '../../domain/repositories/converter_repository.dart';
 import 'converter_event.dart';
 import 'converter_state.dart';
 
-const int _maxParallel = 2; // توازي محدود لتوفير RAM
+const int _maxParallel = 1; // تشغيل متسلسل لتتابع المراحل
 
 class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   final PickVideosUseCase pickVideos;
@@ -24,6 +24,8 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   }) : super(const ConverterState()) {
     on<PickVideosEvent>(_onPick);
     on<ConvertAllEvent>(_onConvertAll);
+    on<LoadOutputDirectoryEvent>(_onLoadOutputDirectory);
+    on<SelectOutputDirectoryEvent>(_onSelectOutputDirectory);
     on<RetryItemEvent>(_onRetry);
     on<RemoveItemEvent>(_onRemove);
     on<RenameItemEvent>(_onRename);
@@ -38,12 +40,38 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   Future<void> _onPick(PickVideosEvent event, Emitter<ConverterState> emit) async {
     final picked = await pickVideos();
     if (picked.isEmpty) return;
-    final updated = [...state.items, ...picked];
+
+    final offset = state.items.length;
+    final numbered = picked.asMap().entries.map((entry) {
+      final index = offset + entry.key + 1;
+      return entry.value.copyWith(outputName: 'video_$index');
+    }).toList();
+
     emit(state.copyWith(
-      items: updated,
-      toastMessage: '✦ تمت إضافة ${picked.length} فيديو',
+      items: [...state.items, ...numbered],
+      toastMessage: '✦ تمت إضافة ${numbered.length} فيديو',
     ));
-    add(ConvertAllEvent());
+  }
+
+  Future<void> _onLoadOutputDirectory(
+    LoadOutputDirectoryEvent event,
+    Emitter<ConverterState> emit,
+  ) async {
+    final outputDirectory = await repository.getOutputDirectory();
+    _outputDir = outputDirectory;
+    emit(state.copyWith(outputDirectory: outputDirectory));
+  }
+
+  Future<void> _onSelectOutputDirectory(
+    SelectOutputDirectoryEvent event,
+    Emitter<ConverterState> emit,
+  ) async {
+    await repository.saveOutputDirectory(event.outputPath);
+    _outputDir = event.outputPath;
+    emit(state.copyWith(
+      outputDirectory: event.outputPath,
+      toastMessage: '✦ تم حفظ مجلد الإخراج',
+    ));
   }
 
   void _onConvertAll(ConvertAllEvent event, Emitter<ConverterState> emit) {

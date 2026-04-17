@@ -9,6 +9,13 @@ abstract class ConverterEvent extends Equatable {
 
 class PickVideosEvent extends ConverterEvent {}
 class ConvertAllEvent extends ConverterEvent {}
+class LoadOutputDirectoryEvent extends ConverterEvent {}
+class SelectOutputDirectoryEvent extends ConverterEvent {
+  final String outputPath;
+  const SelectOutputDirectoryEvent(this.outputPath);
+  @override
+  List<Object?> get props => [outputPath];
+}
 
 class RetryItemEvent extends ConverterEvent {
   final String itemId;

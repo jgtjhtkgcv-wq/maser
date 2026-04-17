@@ -9,6 +9,7 @@ import 'data/repositories_impl/converter_repository_impl.dart';
 import 'domain/usecases/pick_videos_usecase.dart';
 import 'domain/usecases/convert_video_usecase.dart';
 import 'presentation/bloc/converter_bloc.dart';
+import 'presentation/bloc/converter_event.dart';
 import 'presentation/pages/home_page.dart';
 
 void main() async {
@@ -51,7 +52,7 @@ class YJConverterApp extends StatelessWidget {
         pickVideos:   PickVideosUseCase(repo),
         convertVideo: ConvertVideoUseCase(repo),
         repository:   repo,
-      ),
+      )..add(LoadOutputDirectoryEvent()),
       child: MaterialApp(
         title: 'YJ Converter',
         debugShowCheckedModeBanner: false,

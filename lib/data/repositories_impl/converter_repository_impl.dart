@@ -2,14 +2,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/video_item.dart';
 import '../../domain/repositories/converter_repository.dart';
 import '../datasources/ffmpeg_datasource.dart';
 
 class ConverterRepositoryImpl implements ConverterRepository {
+  static const _outputDirKey = 'output_directory';
+  static const _mediaScannerChannel = MethodChannel('yj_converter/media_scanner');
+
   final LightCompressorDatasource ffmpeg;
   ConverterRepositoryImpl(this.ffmpeg);
 
@@ -37,6 +42,16 @@ class ConverterRepositoryImpl implements ConverterRepository {
 
   @override
   Future<String> getOutputDirectory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedPath = prefs.getString(_outputDirKey);
+    if (savedPath != null && savedPath.isNotEmpty) {
+      final dir = Directory(savedPath);
+      if (!await dir.exists()) {
+        await dir.create(recursive: true);
+      }
+      return dir.path;
+    }
+
     final Directory dir;
     if (Platform.isAndroid) {
       dir = Directory('/storage/emulated/0/Download/Youssef_Jaber_Converter');
@@ -46,6 +61,24 @@ class ConverterRepositoryImpl implements ConverterRepository {
     }
     if (!await dir.exists()) await dir.create(recursive: true);
     return dir.path;
+  }
+
+  @override
+  Future<void> saveOutputDirectory(String path) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_outputDirKey, path);
+    final dir = Directory(path);
+    if (!await dir.exists()) await dir.create(recursive: true);
+  }
+
+  Future<void> _scanMedia(String outputPath) async {
+    if (!Platform.isAndroid) return;
+
+    try {
+      await _mediaScannerChannel.invokeMethod('scanFile', {'path': outputPath});
+    } catch (_) {
+      // Ignored if scanning fails.
+    }
   }
 
   @override
@@ -72,6 +105,7 @@ class ConverterRepositoryImpl implements ConverterRepository {
       );
 
       if (success) {
+        await _scanMedia(outputPath);
         controller.add(item.copyWith(status: ConvertStatus.done, progress: 1.0));
       } else {
         controller.add(item.copyWith(

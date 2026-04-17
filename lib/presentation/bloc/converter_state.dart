@@ -4,19 +4,23 @@ import '../../domain/entities/video_item.dart';
 class ConverterState extends Equatable {
   final List<VideoItem> items;
   final String? toastMessage;
+  final String? outputDirectory;
 
   const ConverterState({
     this.items = const [],
     this.toastMessage,
+    this.outputDirectory,
   });
 
   ConverterState copyWith({
     List<VideoItem>? items,
     String? toastMessage,
+    String? outputDirectory,
   }) =>
       ConverterState(
         items: items ?? this.items,
         toastMessage: toastMessage,
+        outputDirectory: outputDirectory ?? this.outputDirectory,
       );
 
   int get total       => items.length;
@@ -25,5 +29,5 @@ class ConverterState extends Equatable {
   int get errorCount  => items.where((i) => i.status == ConvertStatus.error).length;
 
   @override
-  List<Object?> get props => [items, toastMessage];
+  List<Object?> get props => [items, toastMessage, outputDirectory];
 }

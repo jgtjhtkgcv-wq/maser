@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path/path.dart' as p;
@@ -37,6 +38,11 @@ class LightCompressorDatasource {
 
       if (result is OnSuccess) {
         onLog('LightCompressor completed: ${result.destinationPath}');
+        final outputFile = File(outputPath);
+        if (result.destinationPath != outputPath) {
+          await outputFile.parent.create(recursive: true);
+          await File(result.destinationPath).copy(outputPath);
+        }
         onProgress(1.0);
         return true;
       }
