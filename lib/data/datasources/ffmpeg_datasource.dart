@@ -1,12 +1,12 @@
 import 'dart:async';
 
-// FIX: استخدام الحزمة الكاملة ffmpeg_kit_flutter_full
+// FIX: استخدام الحزمة الكاملة ffmpeg_kit_flutter
 // تضمن دعم: H.263, AMR-NB (opencore-amr), 3GP, وكل الترميزات الكلاسيكية
-import 'package:ffmpeg_kit_flutter_full/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_full/ffmpeg_kit_config.dart';
-import 'package:ffmpeg_kit_flutter_full/log.dart';
-import 'package:ffmpeg_kit_flutter_full/statistics.dart';
-import 'package:ffmpeg_kit_flutter_full/return_code.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
+import 'package:ffmpeg_kit_flutter/log.dart';
+import 'package:ffmpeg_kit_flutter/statistics.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 
 /// ═══════════════════════════════════════════════════════════════════
 /// المعيار الذهبي لتحويل الفيديو لهواتف itel والشاشات الصغيرة:

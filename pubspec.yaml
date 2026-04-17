@@ -17,7 +17,7 @@ dependencies:
   # ── FFmpeg FULL — يدعم كل الترميزات شاملاً: AMR-NB, H.263, 3GP ──
   # هذه هي النسخة الكاملة (Full Package) التي تحتوي على opencore-amr
   # وتضمن دعم ترميز الصوت amr_nb المطلوب لهواتف itel
-  ffmpeg_kit_flutter_full: ^6.0.3
+  ffmpeg_kit_flutter: ^5.1.0
 
   # ── اختيار الملفات والصلاحيات ─────────────────────────────────────
   file_picker: ^9.0.0

@@ -9,6 +9,7 @@ android {
     namespace = "com.youssefjaber.yj_converter"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
+    buildToolsVersion = "34.0.0"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -28,6 +29,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        ndk {
+            abiFilters("armeabi-v7a", "arm64-v8a")
+        }
     }
 
     buildTypes {
