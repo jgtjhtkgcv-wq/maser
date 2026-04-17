@@ -1,0 +1,41 @@
+name: yj_converter
+description: Youssef Jaber MP4 to 3GP Video Converter
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ── BLoC ──────────────────────────────────────────────────────────
+  flutter_bloc: ^9.0.0
+  equatable: ^2.0.5
+
+  # ── FFmpeg FULL — يدعم كل الترميزات شاملاً: AMR-NB, H.263, 3GP ──
+  # هذه هي النسخة الكاملة (Full Package) التي تحتوي على opencore-amr
+  # وتضمن دعم ترميز الصوت amr_nb المطلوب لهواتف itel
+  ffmpeg_kit_flutter_full: ^6.0.3
+
+  # ── اختيار الملفات والصلاحيات ─────────────────────────────────────
+  file_picker: ^9.0.0
+  permission_handler: ^11.3.1
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+  # ── واجهة المستخدم ─────────────────────────────────────────────────
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+  gap: ^3.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/

@@ -1,0 +1,33 @@
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.log
+
+# Android
+android/.gradle/
+android/app/release/
+android/captures/
+android/local.properties
+*.iml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# YJ env
+.yj_env
+
+# Local Android SDK installation
+android-sdk/
+
+# Flutter metadata
+.metadata

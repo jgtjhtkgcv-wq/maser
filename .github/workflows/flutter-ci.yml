@@ -1,0 +1,52 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build Android debug
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Android SDK packages
+        uses: reactivecircus/android-emulator-runner@v3
+        with:
+          api-level: 33
+          target: default
+          arch: x86_64
+          force-avd-creation: false
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+        working-directory: yj_converter
+
+      - name: Run Flutter analyze
+        run: flutter analyze
+        working-directory: yj_converter
+
+      - name: Run Flutter tests
+        run: flutter test
+        working-directory: yj_converter
+
+      - name: Build APK
+        run: flutter build apk --debug --no-shrink
+        working-directory: yj_converter
