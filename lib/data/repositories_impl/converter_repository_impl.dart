@@ -10,7 +10,7 @@ import '../../domain/repositories/converter_repository.dart';
 import '../datasources/ffmpeg_datasource.dart';
 
 class ConverterRepositoryImpl implements ConverterRepository {
-  final FfmpegDatasource ffmpeg;
+  final LightCompressorDatasource ffmpeg;
   ConverterRepositoryImpl(this.ffmpeg);
 
   @override
@@ -55,7 +55,7 @@ class ConverterRepositoryImpl implements ConverterRepository {
     Future<void> run() async {
       controller.add(item.copyWith(status: ConvertStatus.processing, progress: 0.0));
 
-      final outputPath = p.join(outputDir, '${item.outputName}.3gp');
+      final outputPath = p.join(outputDir, '${item.outputName}.mp4');
       const fallbackDuration = 120.0;
 
       final success = await ffmpeg.convertTo3gp(
@@ -76,7 +76,7 @@ class ConverterRepositoryImpl implements ConverterRepository {
       } else {
         controller.add(item.copyWith(
           status: ConvertStatus.error,
-          errorMessage: 'FFmpeg فشل · تحقق من صلاحيات الملف أو صحة التنسيق',
+          errorMessage: 'فشل التحويل · تحقق من صلاحيات الملف أو صحة التنسيق',
         ));
       }
     }

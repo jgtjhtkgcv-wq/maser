@@ -43,8 +43,8 @@ class YJConverterApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ffmpeg = FfmpegDatasource();
-    final repo   = ConverterRepositoryImpl(ffmpeg);
+    final compressor = LightCompressorDatasource();
+    final repo = ConverterRepositoryImpl(compressor);
 
     return BlocProvider(
       create: (_) => ConverterBloc(

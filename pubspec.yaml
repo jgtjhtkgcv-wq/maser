@@ -14,10 +14,8 @@ dependencies:
   flutter_bloc: ^9.0.0
   equatable: ^2.0.5
 
-  # ── FFmpeg FULL — يدعم كل الترميزات شاملاً: AMR-NB, H.263, 3GP ──
-  # هذه هي النسخة الكاملة (Full Package) التي تحتوي على opencore-amr
-  # وتضمن دعم ترميز الصوت amr_nb المطلوب لهواتف itel
-  ffmpeg_kit_flutter: ^5.1.0
+  # ── Light Compressor — ضغط فيديو أسرع مع دعم التسريع العتادي ──
+  light_compressor: ^2.2.0
 
   # ── اختيار الملفات والصلاحيات ─────────────────────────────────────
   file_picker: ^9.0.0
