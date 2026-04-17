@@ -15,7 +15,7 @@ class ConverterRepositoryImpl implements ConverterRepository {
   static const _outputDirKey = 'output_directory';
   static const _mediaScannerChannel = MethodChannel('yj_converter/media_scanner');
 
-  final LightCompressorDatasource ffmpeg;
+  final VideoCompressDatasource ffmpeg;
   ConverterRepositoryImpl(this.ffmpeg);
 
   @override
@@ -103,7 +103,6 @@ class ConverterRepositoryImpl implements ConverterRepository {
       final success = await ffmpeg.convertTo3gp(
         inputPath: item.sourcePath,
         outputPath: outputPath,
-        videoDurationSec: fallbackDuration,
         onProgress: (prog) {
           controller.add(item.copyWith(
             status: ConvertStatus.processing,

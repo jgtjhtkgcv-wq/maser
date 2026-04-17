@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:video_compress/video_compress.dart';
 
 import 'core/theme/app_theme.dart';
 import 'data/datasources/ffmpeg_datasource.dart';
@@ -56,7 +57,8 @@ class YJConverterApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final compressor = LightCompressorDatasource();
+    VideoCompress.setLogLevel(0);
+    final compressor = VideoCompressDatasource();
     final repo = ConverterRepositoryImpl(compressor);
 
     return BlocProvider(

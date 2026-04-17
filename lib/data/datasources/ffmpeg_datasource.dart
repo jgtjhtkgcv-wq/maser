@@ -1,64 +1,63 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:light_compressor/light_compressor.dart';
-import 'package:path/path.dart' as p;
+import 'package:video_compress/video_compress.dart';
 
 /// ═══════════════════════════════════════════════════════════════════
-/// استخدام LightCompressor لضغط الفيديو مع جودة متوافقة مع الأجهزة القديمة.
+/// استخدام VideoCompress لضغط الفيديو ونقل الناتج إلى المجلد المحدد.
 /// ═══════════════════════════════════════════════════════════════════
-class LightCompressorDatasource {
-  /// يحوّل [inputPath] إلى ملف مضغوط باستخدام LightCompressor.
+class VideoCompressDatasource {
+  /// يحوّل [inputPath] إلى ملف مضغوط باستخدام VideoCompress.
   /// يُرسل قيم progress من 0.0 إلى 1.0 عبر [onProgress].
   Future<bool> convertTo3gp({
     required String inputPath,
     required String outputPath,
-    required double videoDurationSec,
     required void Function(double) onProgress,
     required void Function(String) onLog,
   }) async {
-    final compressor = LightCompressor();
-    final subscription = compressor.onProgressUpdated.listen((progress) {
+    final subscription = VideoCompress.compressProgress$.subscribe((progress) {
       final prog = (progress / 100.0).clamp(0.0, 1.0);
       onProgress(prog);
     });
 
     try {
-      final result = await compressor.compressVideo(
-        path: inputPath,
-        videoQuality: VideoQuality.very_low,
-        isMinBitrateCheckEnabled: false,
-        video: Video(
-          videoName: p.basename(outputPath),
-          keepOriginalResolution: true,
-        ),
-        android: AndroidConfig(isSharedStorage: true, saveAt: SaveAt.Movies),
-        ios: IOSConfig(saveInGallery: false),
+      final info = await VideoCompress.compressVideo(
+        inputPath,
+        quality: VideoQuality.LowQuality,
+        deleteOrigin: false,
+        includeAudio: true,
       );
 
-      if (result is OnSuccess) {
-        onLog('LightCompressor completed: ${result.destinationPath}');
-        final outputFile = File(outputPath);
-        if (result.destinationPath != outputPath) {
-          await outputFile.parent.create(recursive: true);
-          await File(result.destinationPath).copy(outputPath);
-        }
-        onProgress(1.0);
-        return true;
+      final resultPath = info?.path;
+      if (resultPath == null || resultPath.isEmpty) {
+        onLog('VideoCompress failed: no output path returned');
+        return false;
       }
 
-      if (result is OnFailure) {
-        onLog('LightCompressor failed: ${result.message}');
-      } else if (result is OnCancelled) {
-        onLog('LightCompressor cancelled');
+      onLog('VideoCompress completed: $resultPath');
+      onProgress(1.0);
+
+      final compressedFile = File(resultPath);
+      if (!await compressedFile.exists()) {
+        onLog('VideoCompress failed: compressed file not found');
+        return false;
       }
 
-      return false;
+      final movedFile = File(outputPath);
+      await movedFile.parent.create(recursive: true);
+      if (await movedFile.exists()) {
+        await movedFile.delete();
+      }
+
+      await compressedFile.copy(outputPath);
+      await compressedFile.delete();
+
+      return true;
     } catch (error) {
       onLog(error.toString());
       return false;
     } finally {
-      await subscription.cancel();
+      subscription.unsubscribe();
     }
   }
 }

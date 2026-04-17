@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_compress/video_compress.dart';
 import '../../domain/entities/video_item.dart';
 import '../../domain/usecases/pick_videos_usecase.dart';
 import '../../domain/usecases/convert_video_usecase.dart';
@@ -133,9 +134,18 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
         onDone: () {
           _subs.remove(item.id);
           _triggerQueue();
+          _cleanupTempFilesIfComplete();
         },
       );
     });
+  }
+
+  void _cleanupTempFilesIfComplete() {
+    final active = state.items.where((i) => i.status == ConvertStatus.processing).length;
+    final queued = state.items.where((i) => i.status == ConvertStatus.queued).length;
+    if (active == 0 && queued == 0) {
+      VideoCompress.deleteAllCache();
+    }
   }
 
   @override
