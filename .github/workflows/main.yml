@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4 # تحديث للإصدار 4
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4 # تحديث للإصدار 4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -25,7 +25,7 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Give Permissions to Gradlew
+      - name: Give Permissions
         run: chmod +x android/gradlew
 
       - name: Get Dependencies
@@ -35,7 +35,7 @@ jobs:
         run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # حل المشكلة: التحديث للإصدار 4
         with:
           name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
