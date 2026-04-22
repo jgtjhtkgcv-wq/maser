@@ -1,33 +1,19 @@
 name: yj_converter
-description: Youssef Jaber MP4 to 3GP Video Converter
+description: A new Flutter project.
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
-  # ── BLoC ──────────────────────────────────────────────────────────
-  flutter_bloc: ^9.0.0
-  equatable: ^2.0.5
-
-  # ── Video Compress — محرك ضغط الفيديو الجديد ───────────────────────────
-  ffmpeg_kit_flutter_full: ^6.0.3-LTS
-
-  # ── اختيار الملفات والصلاحيات ─────────────────────────────────────
-  file_picker: ^11.0.2
-  permission_handler: ^12.0.1
-  path_provider: ^2.1.4
-  path: ^1.9.0
-  shared_preferences: ^2.2.0
-
-  # ── واجهة المستخدم ─────────────────────────────────────────────────
+  ffmpeg_kit_flutter_full: ^6.0.3
+  file_picker: ^8.0.0
   google_fonts: any
-  flutter_animate: ^4.5.0
-  gap: ^3.0.1
+  path_provider: any
+  permission_handler: any
 
 dev_dependencies:
   flutter_test:
