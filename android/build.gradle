@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.9.0'
+    ext.kotlin_version = '2.1.0'
     repositories { google(); mavenCentral() }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.1'
@@ -8,13 +8,6 @@ buildscript {
 }
 allprojects {
     repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://www.jitpack.io' }
+        google(); mavenCentral(); maven { url 'https://jitpack.io' }
     }
-}
-rootProject.buildDir = '../build'
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-    project.evaluationDependsOn(':app')
 }

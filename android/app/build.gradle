@@ -5,8 +5,9 @@ plugins {
 }
 android {
     namespace "com.example.yj_converter"
-    compileSdk 34
+    compileSdk 36
     defaultConfig {
+        ndkVersion = "28.2.13676358"
         applicationId "com.example.yj_converter"
         minSdkVersion 24
         targetSdkVersion 34

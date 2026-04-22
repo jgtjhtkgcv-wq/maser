@@ -17,7 +17,7 @@ class _YJConverterState extends State<YJConverter> {
   double progress = 0.0;
 
   Future<void> convertVideo() async {
-    FilePickerResult? result = await FilePicker().pickFiles(type: FileType.video);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.video);
     if (result == null) return;
 
     File inputFile = File(result.files.single.path!);
