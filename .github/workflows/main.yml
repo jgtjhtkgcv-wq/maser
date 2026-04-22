@@ -21,7 +21,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.2' # إصدار يضمن تخطي حاجز Dart 3.7
+          # استخدام قناة التحميل المباشر لأحدث نسخة مستقرة لضمان وجود Dart 3.7
           channel: 'stable'
           cache: true
 
@@ -30,7 +30,10 @@ jobs:
 
       - name: Resolve Dependencies
         run: |
-          flutter pub upgrade
+          # تنظيف الكاش القديم تماماً
+          flutter clean
+          # إجبار النظام على استخدام إصدارات متوافقة مع الـ SDK المتاح
+          flutter pub upgrade --major-versions
           flutter pub get
 
       - name: Build APK
