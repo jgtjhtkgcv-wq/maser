@@ -21,18 +21,17 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          flutter-version: '3.22.0' # إصدار حديث يحل مشكلة Dart SDK
           channel: 'stable'
           cache: true
 
-      - name: Fix Permissions and Gradle
-        run: |
-          # البحث عن ملف gradlew وإعطائه صلاحيات التنفيذ أينما وجد
-          find . -name "gradlew" -exec chmod +x {} +
-          echo "✅ Permissions fixed"
+      - name: Fix Permissions
+        run: find . -name "gradlew" -exec chmod +x {} +
 
-      - name: Get Dependencies
-        run: flutter pub get
+      - name: Resolve Dependencies
+        run: |
+          flutter pub upgrade
+          flutter pub get
 
       - name: Build APK
         run: flutter build apk --release --no-tree-shake-icons
