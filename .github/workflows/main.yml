@@ -22,6 +22,7 @@ jobs:
         run: find . -name "gradlew" -exec chmod +x {} +
       - name: Build
         run: |
+          flutter pub cache clean -f
           flutter pub get
           flutter build apk --release --no-tree-shake-icons --android-skip-build-dependency-validation
       - name: Upload
