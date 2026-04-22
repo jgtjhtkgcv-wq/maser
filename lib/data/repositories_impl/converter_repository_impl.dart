@@ -98,8 +98,6 @@ class ConverterRepositoryImpl implements ConverterRepository {
         await outputFile.delete();
       }
 
-      const fallbackDuration = 120.0;
-
       final success = await ffmpeg.convertTo3gp(
         inputPath: item.sourcePath,
         outputPath: outputPath,
